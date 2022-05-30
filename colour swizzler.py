@@ -31,7 +31,7 @@ def swizzle_image(image_surf, swizzle, x, y, top_surf):
                     ["g", "b", "b"],  # 6 red and black (pirate)
                     ["r", "b", "b"],  # 7 pure red
                     ["r", "g", "g"],  # 8 faded red
-                    ["g", "b", "b"],  # 9 pure black
+                    ["b", "b", "b"],  # 9 pure black
                     ["g", "g", "g"],  # 10 faded black
                     ["r", "r", "r"],  # 11 pure white
                     ["g", "g", "b"],  # 12 darkened blue
@@ -112,6 +112,7 @@ def main():
 
     path = str(pathlib.Path.home())  # Set the path to this as a default
     swizzle = 0  # Default swizzle
+    last_path = ""
 
     pygame.key.start_text_input()  # Makes life a little easier (handles capitilisation for us
     mode = 0  # 0 = default, type numbers to change swizzle, press enter to type an image path. 1 = type path
@@ -136,15 +137,16 @@ def main():
                 elif event.key == K_RETURN:
                     if mode:
                         path = (str(pathlib.Path.home()) + text_input).replace(r"\\", "/")
+                        last_path = text_input
                         text_input = ""
                         mode = 0
                         new_image = 1
                     else:
                         mode = 1
-                        text_input = ""
-                elif event.key == K_PLUS or event.key == K_KP_PLUS:
+                        text_input = last_path
+                elif (event.key == K_PLUS or event.key == K_KP_PLUS) and not mode:
                     swizzle += 1
-                elif event.key == K_MINUS or event.key == K_KP_MINUS:
+                elif (event.key == K_MINUS or event.key == K_KP_MINUS) and not mode:
                     swizzle -= 1
                 elif event.key == K_BACKSPACE:
                     text_input = text_input[:-1]
