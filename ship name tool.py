@@ -28,7 +28,7 @@ ships = {}
 sorting_ships = True
 while sorting_ships: # This finds the next ship node
     if "ship " in text[pos] and (not "\t" in text[pos]):  # must be a root node, can't be indented
-        model = (text[pos].split(" "))[1]  # Extract the model of the ship itself
+        model = " ".join((text[pos].split(" "))[1:])  # Extract the model of the ship itself
         model = model.replace("\"", "")  # Remove any quotes around ship models
         pos += 1
         temp_text = text[pos].replace("\t", "")
@@ -93,9 +93,9 @@ while True:
         for i in ships:
             if apply == "" or apply == ships[i][0]:  # If applying to all or this model
                 if numbered == 1:
-                    ships[i][1] = num + " " + core
+                    ships[i][1] = str(num) + " " + core
                 elif numbered == 2:
-                    ships[i][1] = core + " " + num
+                    ships[i][1] = core + " " + str(num)
                 else:
                     ships[i][1] = core
                 num += 1
