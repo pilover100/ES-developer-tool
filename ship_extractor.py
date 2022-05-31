@@ -180,7 +180,7 @@ def open_save():  # Called to open a save file, or any other ES data file contai
 
     name_info = extract_info(ships)
 
-    title = filename.split("/")[-1]
+    title = path.split("/")[-1]
     root.title(title)
     box.showinfo("Save file", "Ships loaded from file.")
     root.event_generate("<<rebuild_filters>>")
@@ -199,7 +199,7 @@ def save_variants():  # Called to save variants
     global variants
 
     path = filedialog.asksaveasfilename()
-    save_file(path, varients)
+    save_file(path, variants)
     box.showinfo("Variants", "Variants saved to file.")
 
 def clear_ships():
@@ -228,7 +228,7 @@ def exit_exe(Garbage = None):
     sys.exit()
 
 def about(Garbage = None):
-    about_text = "Ship to Varient Extractor Copyright (C) 2022 pilover100"
+    about_text = "Ship to Variant Extractor Copyright (C) 2022 pilover100"
     about_text += "\nThis program is distributed under the GNU GENERAL PUBLIC LICENSE version 3"
     about_text += "\nThis program comes with ABSOLUTELY NO WARRANTY; for details read the license."
     about_text += "\nThis is free software, and you are welcome to redistribute it"
@@ -256,7 +256,7 @@ def build_filters(Garbage = None):
 def convert():
     global ships
     global base
-    global varients
+    global variants
     global name_info
     global model_filter
     global name_filter
@@ -291,7 +291,9 @@ def convert():
 
     base_outfits = []  # Get outfits
     base_attributes = {}  # Get attributes
-    base_hardpoints = []  # Get hardpoint locations (including bays and engines)
+    base_hardpoints = []  # Get hardpoint locations
+    base_engines = []  # Engine locations
+    base_bays = []  # Bay locations
     base_loadout = []  # Get what's in the hardpoints
     base_die = []  # What happens when the ship dies (leaks and explosions)
     for i in range(len(base)):
@@ -305,6 +307,7 @@ def convert():
                         base_outfits.append(base[pos][1])
                 elif indent > 1:
                     base_outfits.append(base[pos][1])
+                pos += 1
         elif base[i][1] == "attributes":
             pos = i + 1
             indent = 2
@@ -312,8 +315,35 @@ def convert():
                 indent = base[pos][0]
                 if len(base[pos]) > 2:
                     base_attributes[base[pos][1]] = base[pos][2]
-                else:
+                elif indent > 1:
                     base_attributes[base[pos][1]] = True
+                pos += 1
+        elif base[i][1] == "engine":
+            pos = i +1
+            indent = 2
+            x = base[i][2]
+            y = base[i][3]
+            engine = [["engine", x, y]]
+            while indent > 1:
+                indent = base[pos][0]
+                if indent > 1:
+                    engine.append(base[pos][1:])
+                pos += 1
+            base_engines.append(engine)
+        elif base[i][1] == "bay":
+            pos = i + 1
+            indent = 2
+            bay_type = base[i][2]
+            x = base[i][3]
+            y= base[i][4]
+            bay = [["bay", bay_type, x, y]]
+            while indent > 1:
+                indent = base[pos][0]
+                if indent > 1:
+                    bay.append(base[pos][1:])
+                pos += 1
+            base_bays.append(bay)
+
     base_outfits.sort()  # So that we can compare
 
     for ship in temp_ships:
@@ -329,13 +359,14 @@ def convert():
                 indent = 2
                 while indent > 1:
                     indent = ship[pos][0]
-                    if if indent > 1 and len(ship[pos]) > 2:
+                    if indent > 1 and len(ship[pos]) > 2:
                         outfits_unsorted.append([ship[pos][1], ship[pos][2]])
                         for j in range(ship[pos][2]):
                             ship_outfits.append(ship[pos][1])
                     elif indent > 1:
                         outfits_unsorted.append([ship[pos][1]])
                         ship_outfits.append(ship[pos][1])
+                    pos += 1
                 ship_outfits.sort()
             elif base[i][1] == "attributes":
                 pos = i + 1
@@ -344,13 +375,14 @@ def convert():
                     indent = ship[pos][0]
                     if len(ship[pos]) > 2:
                         ship_attributes[ship[pos][1]] = ship[pos][2]
-                    else:
+                    elif indent > 1:
                         ship_attributes[ship[pos][1]] = True
+                    pos += 1
 
 
 # Init window
 root = Tk()
-root.title("Ship to Varient Extractor")
+root.title("Ship to Variant Extractor")
 
 root.columnconfigure(100, weight = 1)
 root.rowconfigure(100, weight = 1)
