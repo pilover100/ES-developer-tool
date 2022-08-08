@@ -47,3 +47,10 @@ In the future I will replace this tool with a better GUI version powered by TkIn
 ---
 
 This WIP tool allows for the extraction of save game ships as variants or a base ship (the flagship, or first ship, in the save file provided)
+
+---
+## *win dev setup.py*
+---
+
+This tool downloads all the requirements for compiling ES on a windows computer. It requires admin permissions to run (though windows may launch UAC for these interactions) properly.
+See the official ES compiling readme for more configuration info or ask in the ES discord.
