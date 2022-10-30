@@ -11,7 +11,7 @@ jobs:
   cd_ubuntu_x86_64:
     runs-on: ubuntu-latest
     env:
-      OUTPUT: tools.tar.gz
+      OUTPUT: ES_tools_linux.tar.gz
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
@@ -27,7 +27,9 @@ jobs:
           python3 -m nuitka --standalone --onefile --include-package-data=freesansbold.ttf --assume-yes-for-downloads "ship name tool.py"
           python3 -m nuitka --standalone --onefile --assume-yes-for-downloads "ship variant extractor.py"
       - name: Package tools
-        run: tar -czf ${{ env.OUTPUT }} "colour swizzler" "ship name tool" "ship variant extractor" README.md LICENSE
+        run: |
+          ls
+          tar -czf ${{ env.OUTPUT }} "colour swizzler.bin" "ship name tool.bin" "ship variant extractor.bin" README.md LICENSE
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
@@ -37,7 +39,7 @@ jobs:
   cd_windows_win64:
     runs-on: windows-latest
     env:
-      OUTPUT: tools.zip
+      OUTPUT: ES_tools_win32.zip
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
