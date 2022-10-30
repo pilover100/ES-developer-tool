@@ -25,8 +25,9 @@ jobs:
         run: |
           python3 -m nuitka --standalone --onefile --include-package-data=freesansbold.ttf --assume-yes-for-downloads "colour swizzler.py"
           python3 -m nuitka --standalone --onefile --include-package-data=freesansbold.ttf --assume-yes-for-downloads "ship name tool.py"
+          python3 -m nuitka --standalone --onefile --assume-yes-for-downloads "ship variant extractor.py"
       - name: Package tools
-        run: tar -czf ${{ env.OUTPUT }} colour\ swizzler.* ship\ name\ tool.* README.md LICENSE
+        run: tar -czf ${{ env.OUTPUT }} "colour swizzler" "ship name tool" "ship variant extractor" README.md LICENSE
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
@@ -48,8 +49,9 @@ jobs:
         run: |
            python -m nuitka --standalone --onefile --include-package-data=freesansbold.ttf --assume-yes-for-downloads "colour swizzler.py"
            python -m nuitka --standalone --onefile --include-package-data=freesansbold.ttf --assume-yes-for-downloads "ship name tool.py"
+           python -m nuitka --standalone --onefile --assume-yes-for-downloads "ship variant extractor.py"
       - name: package tools
-        run: 7z a ${{ env.OUTPUT }} colour\ swizzler.* ship\ name\ tool.* README.md LICENSE
+        run: 7z a ${{ env.OUTPUT }} "colour swizzler.exe" "ship name tool.exe" "ship variant extractor.exe" README.md LICENSE
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
