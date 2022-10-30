@@ -4,25 +4,29 @@ ship variant extractor
 """
 
 import os
-import pathlib
 from sys import platform
+import pathlib
 
 instructions = "This is the pi ship variant extractor.\n"
-instructions += "In the file to parse, please ensure that each ship has a unique name.\n"
+instructions += "In the save to parse, please ensure that each ship to extract has a unique name.\n"
 instructions += "The pi ship name tool can also help with this if required.\n"
-instructions += "Then please follow the prompts below to extract your variants.\n"
+instructions += "Please follow the prompts below to extract your variants.\n"
 
 
 print(instructions)
-file_name = input("Enter save file name including extension: ")
+file_name = input("Enter save file name: ")
+if not file_name.endswith(".txt"):
+    file_name += ".txt"
 
 # Windows version
 if platform.startswith("win32"):
     path = str(pathlib.Path.home()) + "/AppData/Roaming/endless-sky/saves/" + file_name
+    print(f"Windows detected. Save file path: {path}")
 
 # Linux version
 elif platform.startswith("linux"):
     path = os.path.join("~/.local/share/endless-sky/saves", file_name)
+    print(f"Linux detected. Save file path: {path}")
 
 else:  # Misc/Apple/unknown version
     path_start = input("Please enter the path to the saves directory: ")
@@ -89,11 +93,11 @@ for i in range(len(ship_lines)):
     name = name.strip()
     names.append(name)
 
-print("Vessels:")
+print(f"\n{model} ships found:")
 for i in names:
     print(i)
 
-base_name = input("\nEnter the name of the ship to use as the base ship for reference: ")
+base_name = input("\nEnter the name of the base ship to use for reference: ")
 
 base = ships[names.index(base_name)]
 
@@ -218,8 +222,26 @@ for vessel in variants:
 
 print("\n" + output + "\n")
 
-filename = input("Enter save location and filename: ")
+# Windows version
+if platform.startswith("win32"):
+    path = str(os.path.join(str(pathlib.Path.home()), "variants.txt"))
+
+# Linux version
+elif platform.startswith("linux"):
+    path = "~/variants.txt"
+
+else:  # Fallback option
+    path = os.path.join(os.getcwd(), "variants.txt")
+
+filename = input(f"Enter path to place output default: [{path}]: ")
+if filename == "":
+    filename = path
+if not filename.endswith(".txt"):
+        filename += ".txt"
+if not ("/" in filename or "\\" in filename):
+    filename = os.path.join(path,filename)
 file = open(filename, "w")
 file.write(output)
 file.close()
-print("Done!\nIf you are aiming to get these variants into vanilla, please ensure that the data output matches the existing style of variant definitions.")
+print("Done!\nN.B. If you are aiming to get these variants into vanilla, please ensure that the data output matches the existing style of variant definitions.")
+print("Of course, if this is for a plugin, feel free just to use the output from this program as this will also work fine.")
