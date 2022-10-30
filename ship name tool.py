@@ -9,13 +9,25 @@ Linux users: Comment out lines 15 and 122
 
 import os
 import pathlib
+from sys import platform
 
-file_name = input("Enter save file name including extension: ")
+file_name = input("Enter save file name: ")
+if not file_name.endswith(".txt"):
+    file_name += ".txt"
+
 # Windows version
-path = str(pathlib.Path.home()) + "/AppData/Roaming/endless-sky/saves/" + file_name
+if platform.startswith("win32"):
+    path = str(pathlib.Path.home()) + "/AppData/Roaming/endless-sky/saves/" + file_name
+    print(f"Windows detected. Save file path: {path}")
 
 # Linux version
-#path = os.path.join("~/.local/share/endless-sky/saves", file_name)
+elif platform.startswith("linux"):
+    path = os.path.join("~/.local/share/endless-sky/saves", file_name)
+    print(f"Linux detected. Save file path: {path}")
+
+else:  # Misc/Apple/unknown version
+    path_start = input("Please enter the path to the saves directory: ")
+    path = os.path.join(path_start, file_name)
 
 file = open(path, "r")
 text = file.read().split("\n")
@@ -119,10 +131,12 @@ while True:
             text[i+1] = "\tname \"" + ships[i][1] + "\""
         file_name = input("Enter save file name including extension: ")
         # Windows version
-        path = str(pathlib.Path.home()) + "/AppData/Roaming/endless-sky/saves/" + file_name
+        if platform.startswith("win32"):
+            path = str(pathlib.Path.home()) + "/AppData/Roaming/endless-sky/saves/" + file_name
 
         # Linux version
-        #path = os.path.join("~/.local/share/endless-sky/saves", file_name)
+        elif platform.startswith("linux"):
+            path = os.path.join("~/.local/share/endless-sky/saves", file_name)
         file = open(path, "w")
         for i in text:
             file.write(i + "\n")
