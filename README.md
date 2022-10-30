@@ -10,13 +10,12 @@ Many of these tools are written in python 3, this means that you'll need a pytho
 
 *Some of these programs can be transpiled into C and compiled into a binary, but correct functionality is not guaranteed.*
 
+All tools except win dev setup.py are compiled with each commit, [please see the actions tab for the latest builds](https://github.com/pilover100/ES-developer-tool/actions). Each run marked "CD" is an automated build of all the tools. to use just extract the tools (they may be in 2 levels of zip folders) and run the appropiate executable.
+
 ## Current dependencies:
 
 pygame: install by running `python -m pip install pygame`
 >required for colour swizzler.py
-
-TkInter: bundled with the python distribution, install by selecting the option for `TkInter` when installing the interpreter
->required for ship_extractor.py
 
 ---
 ## *colour swizzler.py*
@@ -43,10 +42,10 @@ The tool is case sensitive so you **must** enter models exactly as the data file
 In the future I will replace this tool with a better GUI version powered by TkInter (ToolKit Interface) which will make it much more user friendly and easier to use.
 
 ---
-## *ship_extractor.py*
+## *ship variant extractor.py*
 ---
 
-This WIP tool allows for the extraction of save game ships as variants or a base ship (the flagship, or first ship, in the save file provided)
+This WIP tool allows for the extraction of save game ships as variants of a base ship specified.
 
 ---
 ## *win dev setup.py*
